@@ -4,167 +4,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Delegates
+namespace FuncActionPredicate
 {
-    // Object
-    // Delegate
-    // MultiCastDelegate
-    // Del1
-
-    //step 1 : create the delegate class having the same signature as the func to call
-    public delegate void Del1();
-
-    public delegate int DelAdd(int a, int b);
     class Program
     {
-        static void Main1()
+        static void Main()
         {
-            //step 2 : create the delegate object passing func name as parameter
-            Del1 objdel = new Del1(Display);
-            //step 3 : call the func indirectly with the delegate object
-            objdel();
-            Console.ReadLine();
-        }
-        static void Main2()
-        {
-            Del1 objdel = Display;
-            objdel();
-            Console.ReadLine();
-        }
-        static void Mai3n()
-        {
-            Del1 objdel = Display;
-            objdel();
-
-            objdel = Show;
-            objdel();
-
-            Console.ReadLine();
-        }
-        static void Main4()
-        {
-            Del1 objdel = Display;
-            objdel();
-
-            Console.WriteLine();
-            objdel += Show;
-            objdel();
-
-            Console.WriteLine();
-            objdel += Display;
-            objdel();
-
-            Console.WriteLine();
-            objdel -= Display;
-            objdel();
-
-
-            Console.ReadLine();
-        }
-
-        static void Main5()
-        {
-            Del1 objdel = Display;
-            objdel();
-
-            Console.WriteLine();
-            objdel =(Del1) Delegate.Combine(objdel, new Del1(Show));
-            objdel();
-
-            Console.WriteLine();
-            objdel = (Del1)Delegate.Combine(objdel, new Del1(Display));
-            objdel();
-
-
-            Console.WriteLine();
-            //objdel = (Del1)Delegate.Remove(objdel, new Del1(Display));
-            objdel = (Del1)Delegate.RemoveAll(objdel, new Del1(Display));
-            objdel();
- 
-            Console.ReadLine();
-        }
-        static void Main6()
-        {
-            //DelAdd objdel = new DelAdd(Add);
-            DelAdd objdel = Add;
-
-            Console.WriteLine( objdel(10,20)  );
-
-            //todo - use multicast delegates with functions that have a return value
-        }
-        static void Main7()
-        {
-            Del1 o1 = Class1.Display;
+            Action o1 = Display;
             o1();
-            Class1 obj = new Class1();
 
-            o1 = obj.Show;
-            o1();
+            Action<string> o2 = Display;
+            o2("hello");
+
+            Action<string, int> o3 = Display;
+            o3("a", 1);
+
+            Func<int, int, int> o4 = Add;
+
+            //int result = o4(10, 20);
+
+            Console.WriteLine(o4(10,20));
+
+            Func<string, int, string> o5 = DoSomething;
+            Console.WriteLine(o5("Vikram",4));
+
+            Func<int, bool> o6 = IsEven;
+            Console.WriteLine(o6(10));
+
+            Predicate<int> o7 = IsEven;
+            Console.WriteLine(o7(10));
+
             Console.ReadLine();
         }
         static void Display()
         {
-            Console.WriteLine("disp");
+            Console.WriteLine("display");
         }
-        static void Show()
+        static void Display(string s)
         {
-            Console.WriteLine("Show");
+            Console.WriteLine("display" + s);
         }
-
-        static int Add(int a, int b)
+        static void Display(string s,int i)
         {
-            return a + b;
-        }
-    }
-
-    public class Class1
-    {
-        public static void Display()
-        {
-            Console.WriteLine("disp");
-        }
-        public void Show()
-        {
-            Console.WriteLine("Show");
-        }
-    }
-}
-
-namespace UsingDelegatesAsAParameterToAFunction  //allows us to decide which func to call at run time (late binding)
-{
-    //public delegate int DelAdd(int a = 0, int b = 0);
-    public delegate int DelAdd(int a , int b );
-    public class Program
-    {
-        static void Main()
-        {
-            Console.WriteLine(CallMathOperation(Add, 20, 10));
-            Console.WriteLine(CallMathOperation(Subtract, 3, 2));
-            Console.WriteLine(CallMathOperation(Multiply, 10, 3));
-            Console.WriteLine(CallMathOperation(Divide, 9, 3));
-            Console.ReadLine();
-        }
-        static int CallMathOperation(DelAdd objDelAdd, int i, int j)
-        {
-            //return objDelAdd();  //if you use default values/optional parameters
-            return objDelAdd(i, j);
+            Console.WriteLine("display" + s + i.ToString());
         }
         static int Add(int a, int b)
         {
             return a + b;
         }
-        static int Subtract(int a, int b)
+        static string DoSomething(string  a, int b)
         {
-            return a - b;
-        }
-        static int Multiply(int a, int b)
-        {
-            return a * b;
-        }
-        static int Divide(int a, int b)
-        {
-            return a / b;
+            return a.Substring(b);
         }
 
+        static bool IsEven(int a)
+        {
+            return a % 2 == 0;
+        }
     }
 }
